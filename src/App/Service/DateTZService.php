@@ -11,7 +11,6 @@ use Exception;
 class DateTZService
 {
     /**
-     * Method returns timezone offset in minutes
      *
      * @param string $timezone
      * @return int
@@ -19,9 +18,8 @@ class DateTZService
      */
     public function getOffsetFromUTC(string $timezone): int
     {
-        $offset = (new \DateTimeZone($timezone))
+        return (new \DateTimeZone($timezone))
             ->getOffset(new \DateTime('now', new DateTimeZone('UTC')));
-        return $offset / 60;
     }
 
     /**
@@ -29,7 +27,7 @@ class DateTZService
      * @param string $year
      * @return int
      */
-    public function getDaysInFebruary(string $year): int
+    public function getDaysInFebruaryByYear(string $year): int
     {
         return \DateTime::createFromFormat('Y-m-d', $year . '-02-01')->format('t');
     }
