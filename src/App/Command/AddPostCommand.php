@@ -4,6 +4,7 @@ namespace App\Command;
 
 use Domain\Post\PostManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,8 +23,9 @@ class AddPostCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('title')
-            ->addArgument('content');
+        $this
+            ->addArgument('title', InputArgument::REQUIRED)
+            ->addArgument('content', InputArgument::REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
