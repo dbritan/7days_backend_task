@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\DateTZ;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeZoneToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  *
  */
-class DateTZInfoType extends AbstractType
+class InfoType extends AbstractType
 {
     /**
      *
@@ -22,10 +24,17 @@ class DateTZInfoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date', TextType::class)
-            ->add('timezone', TextType::class)
+            ->add('date', DateType::class, [
+                'widget' => 'single_text',
+                'format' => 'y-MM-dd',
+                'html5' => false,
+            ])
+            ->add('timeZone', TextType::class)
             ->add('submit', SubmitType::class)
         ;
+
+        $builder->get('timeZone')
+            ->addModelTransformer(new DateTimeZoneToStringTransformer());
     }
 
     /**
@@ -36,7 +45,7 @@ class DateTZInfoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => DateTZInfoFormModel::class,
+            'data_class' => InfoFormModel::class,
         ]);
     }
 }

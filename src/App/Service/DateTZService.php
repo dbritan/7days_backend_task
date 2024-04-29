@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 
@@ -12,23 +13,54 @@ class DateTZService
 {
     /**
      *
-     * @param string $timezone
+     * @param DateTimeZone $timeZone
      * @return int
      * @throws Exception
      */
-    public function getOffsetFromUTC(string $timezone): int
+    public function getTimeZoneOffset(DateTimeZone $timeZone): int
     {
-        return (new \DateTimeZone($timezone))
-            ->getOffset(new \DateTime('now', new DateTimeZone('UTC')));
+        return $timeZone->getOffset(new \DateTime('now', new DateTimeZone('UTC')));
     }
 
     /**
      *
-     * @param string $year
+     * @param DateTimeZone $timeZone
+     * @return int
+     * @throws Exception
+     */
+    public function getTimeZoneOffsetInMinutes(DateTimeZone $timeZone): int
+    {
+        return $this->getTimeZoneOffset($timeZone) / 60;
+    }
+
+    /**
+     *
+     * @param DateTimeInterface $date
      * @return int
      */
-    public function getDaysInFebruaryByYear(string $year): int
+    public function getDaysInFebruary(DateTimeInterface $date): int
     {
-        return \DateTime::createFromFormat('Y-m-d', $year . '-02-01')->format('t');
+        return (clone $date)->modify('first day of february')->format('t');
     }
+
+    /**
+     *
+     * @param DateTimeInterface $date
+     * @return int
+     */
+    public function getDaysInMonth(DateTimeInterface $date): int
+    {
+        return $date->format('t');
+    }
+
+    /**
+     *
+     * @param DateTimeInterface $date
+     * @return string
+     */
+    public function getNameOfMonth(DateTimeInterface $date): string
+    {
+        return $date->format('F');
+    }
+
 }
